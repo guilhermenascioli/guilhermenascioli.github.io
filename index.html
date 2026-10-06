@@ -94,6 +94,12 @@ footer{padding:26px 0;text-align:center;color:var(--mut);font-size:13px;border-t
 .disc{font-size:12px;color:var(--mut);margin:14px 0 0}
 @media(max-width:720px){.pc{grid-template-columns:1fr}.about{grid-template-columns:1fr}nav ul{gap:14px;font-size:13px}.hero{padding-top:70px}}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:4px}
+.market-details{margin:18px 0}.market-details summary{cursor:pointer;margin-bottom:14px;color:var(--acc)}
+.chart{padding:20px;border:1px solid var(--line);border-radius:14px;margin:20px 0}.chart svg{width:100%;height:auto}.chart .m{color:var(--mut);font-size:12px}
+.chart details{max-height:300px;overflow:auto}.chart table{width:100%;font-size:13px;border-collapse:collapse}.chart th,.chart td{padding:8px;text-align:left;border-bottom:1px solid var(--line)}
+.analysis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:22px;margin-top:16px}.analysis-grid ul{padding-left:18px}.source-link{color:var(--acc);font-size:13px;text-decoration:underline}
+.kpis b{font-size:22px;overflow-wrap:anywhere}.cons .m{font-size:12px;color:var(--mut)}
 </style>
 </head>
 <body>
@@ -137,9 +143,12 @@ footer{padding:26px 0;text-align:center;color:var(--mut);font-size:13px;border-t
 <h3>AI Financial Market Intelligence</h3>
 <p>Monitora notícias de ativos da B3 e usa IA para classificar sentimento, impacto e temas. Pipeline: coleta → tratamento → filtragem → armazenamento → análise por IA → visualização.</p>
 <div class="tags"><span>Python</span><span>RSS</span><span>IA generativa</span><span>JSON estruturado</span><span>Mercado financeiro</span></div>
-<div class="demo">Demonstração com dados de exemplo (fictícios). O pipeline real será conectado em seguida.</div>
+<div class="demo" id="dashboard-status" role="status">Carregando dados da carteira…</div>
 <div class="tabs" id="tabs"></div>
 <div class="kpis" id="kpis"></div>
+<p id="quote-status" class="disc"></p>
+<details class="market-details"><summary>Mais indicadores de mercado e da posição</summary><div class="kpis" id="market-fields"></div></details>
+<div id="chart" class="chart"></div>
 <div id="news"></div>
 <div class="cons" id="cons"></div>
 <p class="disc">As análises são geradas automaticamente e não constituem recomendação de investimento.</p>
@@ -169,37 +178,7 @@ footer{padding:26px 0;text-align:center;color:var(--mut);font-size:13px;border-t
 
 <footer>© <span id="y"></span> Guilherme Nascimento Oliveira</footer>
 
-<script>
-document.getElementById("y").textContent=new Date().getFullYear();
-const D={
-PETR4:{n:"Petrobras",c:"Energia · Petróleo",x:"Notícias de investimento sustentam uma leitura levemente positiva, mas a volatilidade do petróleo pede cautela.",s:[
-["Companhia anuncia ampliação de investimentos em produção","pos",.78,"alto","Investimentos","A empresa informou que pretende ampliar o investimento em produção nos próximos anos.","Maior capacidade de produção futura.","Valores e prazos não foram detalhados."],
-["Oscilação do petróleo no exterior pressiona expectativas","neu",.35,"médio","Commodities","O preço do barril variou no dia, com efeito incerto sobre a receita.","Receita tende a acompanhar o petróleo.","Volatilidade dificulta projeções."]]},
-VALE3:{n:"Vale",c:"Mineração",x:"Sinais de demanda ajudam, mas o questionamento operacional mantém o conjunto de notícias dividido.",s:[
-["Demanda por minério de ferro mostra sinais de recuperação","pos",.64,"médio","Commodities","Indicadores sugerem melhora no consumo de minério de ferro.","Demanda maior ajuda volumes e preços.","Recuperação depende de fatores externos."],
-["Empresa enfrenta questionamento sobre operação em unidade","neg",.58,"médio","Operações","Houve questionamento sobre uma unidade, sem impacto financeiro divulgado.","Empresa mantém comunicação com o mercado.","Possível efeito nos volumes se a parada se estender."]]},
-ITUB4:{n:"Itaú Unibanco",c:"Bancos",x:"Resultado forte domina o noticiário, com o custo do crédito como principal ponto de atenção.",s:[
-["Banco divulga resultado trimestral acima do esperado","pos",.85,"alto","Resultados","O lucro do período superou as projeções do mercado.","Rentabilidade acima das estimativas.","Efeito pontual pode não se repetir."],
-["Juros elevados afetam apetite por crédito","neu",.4,"médio","Macroeconomia","O custo alto do crédito pode reduzir a demanda por novas operações.","Margens financeiras se mantêm.","Inadimplência merece acompanhamento."]]},
-BBAS3:{n:"Banco do Brasil",c:"Bancos · Agro",x:"Crescimento do crédito rural é compensado por preocupação com provisões; leitura levemente negativa.",s:[
-["Carteira de crédito rural cresce no período","pos",.6,"médio","Crédito","A carteira rural avançou, favorecendo a receita de juros.","Crescimento em segmento relevante.","Depende do ciclo do agronegócio."],
-["Aumento de provisões preocupa analistas","neg",.66,"alto","Risco de crédito","O banco ampliou provisões para devedores duvidosos.","Maior cobertura contra perdas.","Pode indicar piora da inadimplência."]]},
-B3SA3:{n:"B3",c:"Mercado de capitais",x:"Volume maior favorece a receita, enquanto a concorrência é um risco de médio prazo.",s:[
-["Volume médio negociado sobe no mês","pos",.55,"médio","Volume","O volume diário médio subiu, o que tende a favorecer a receita da bolsa.","Receita ligada ao volume negociado.","A alta pode ser temporária."],
-["Concorrência no mercado de negociação ganha espaço","neg",.45,"médio","Concorrência","Novos participantes disputam parte das operações.","Mercado em desenvolvimento.","Pode pressionar margens no longo prazo."]]}};
-const TM=["09:30","14:10"],LB={pos:"Positivo",neg:"Negativo",neu:"Neutro"},tabs=document.getElementById("tabs");
-function show(k){
-const a=D[k],cnt=t=>a.s.filter(x=>x[1]==t).length;
-[...tabs.children].forEach(b=>b.classList.toggle("on",b.dataset.k==k));
-const avg=a.s.reduce((p,x)=>p+(x[1]=="pos"?x[2]:x[1]=="neg"?-x[2]:0),0)/a.s.length;
-document.getElementById("kpis").innerHTML=`<div><b>${k}</b><span>${a.n} · ${a.c}</span></div><div><b>${avg>=0?"+":""}${avg.toFixed(2)}</b><span>Sentimento médio (−1 a +1)</span></div><div><div class="dist"><i class="pos" style="flex:${cnt("pos")}"></i><i class="neu" style="flex:${cnt("neu")}"></i><i class="neg" style="flex:${cnt("neg")}"></i></div><span>${cnt("pos")} positiva(s) · ${cnt("neu")} neutra(s) · ${cnt("neg")} negativa(s)</span></div>`;
-document.getElementById("news").innerHTML=a.s.map((x,i)=>`<div class="nw"><span class="bd ${x[1]}">${LB[x[1]]} ${Math.round(x[2]*100)}%</span><span class="bd o">Impacto ${x[3]}</span><span class="bd o">${x[4]}</span><h4>[Exemplo] ${x[0]}</h4><div class="m">Hoje, ${TM[i]} · Fonte de exemplo</div><p>${x[5]}</p><div class="pc"><div class="g"><b>Pontos positivos</b>${x[6]}</div><div class="a"><b>Pontos de atenção</b>${x[7]}</div></div></div>`).join("");
-document.getElementById("cons").innerHTML=`<b>Análise consolidada</b>${a.x}`;
-}
-Object.keys(D).forEach(k=>{const b=document.createElement("button");b.textContent=k;b.dataset.k=k;b.onclick=()=>show(k);tabs.appendChild(b)});
-show("PETR4");
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
-document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
-</script>
+<script src="assets/carteira-data.js"></script>
+<script src="assets/dashboard.js"></script>
 </body>
 </html>
