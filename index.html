@@ -92,7 +92,7 @@ footer{padding:26px 0;text-align:center;color:var(--mut);font-size:13px;border-t
 .cons{border:1px solid var(--acc);border-radius:14px;padding:16px;font-size:14.5px;color:#d7ddda;background:rgba(63,216,154,.05)}
 .cons b{color:var(--acc);display:block;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
 .disc{font-size:12px;color:var(--mut);margin:14px 0 0}
-@media(max-width:720px){.pc{grid-template-columns:1fr}.about{grid-template-columns:1fr}nav ul{gap:14px;font-size:13px}.hero{padding-top:70px}}
+@media(max-width:720px){.pc{grid-template-columns:1fr}.about{grid-template-columns:1fr}nav ul{gap:14px;font-size:13px;flex-wrap:wrap;justify-content:flex-end}nav .wrap{height:auto;min-height:60px;gap:16px;padding-top:12px;padding-bottom:12px}.hero{padding-top:70px}}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
 button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:4px}
 .market-details{margin:18px 0}.market-details summary{cursor:pointer;margin-bottom:14px;color:var(--acc)}
@@ -100,28 +100,36 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 .chart details{max-height:300px;overflow:auto}.chart table{width:100%;font-size:13px;border-collapse:collapse}.chart th,.chart td{padding:8px;text-align:left;border-bottom:1px solid var(--line)}
 .analysis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:22px;margin-top:16px}.analysis-grid ul{padding-left:18px}.source-link{color:var(--acc);font-size:13px;text-decoration:underline}
 .kpis b{font-size:22px;overflow-wrap:anywhere}.cons .m{font-size:12px;color:var(--mut)}
+
+.hero-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:center;gap:46px}
+.hero-copy{position:relative;z-index:1}
+.hero-portrait{margin:0;position:relative;width:100%;max-width:350px;justify-self:end;aspect-ratio:4/5;overflow:hidden;mask-image:linear-gradient(to bottom,transparent 0%,#000 12%,#000 78%,transparent 100%),linear-gradient(to right,transparent 0%,#000 14%,#000 86%,transparent 100%);mask-composite:intersect;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 12%,#000 78%,transparent 100%),linear-gradient(to right,transparent 0%,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in}
+.hero-portrait img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 70%}
+@media(max-width:720px){.hero-layout{grid-template-columns:1fr;gap:34px}.hero-portrait{justify-self:center;max-width:300px}.hero{padding-bottom:60px}}
+.cons .ai-error{font-size:11px;line-height:1.5;color:var(--mut);margin-top:16px}
 </style>
 </head>
 <body>
 <nav><div class="wrap"><a class="logo" href="#top">guilherme<i>.</i>dev</a>
-<ul><li><a href="#sobre">Sobre</a></li><li><a href="#experiencia">Experiência</a></li><li><a href="#projetos">Projetos</a></li><li><a href="#skills">Skills</a></li><li><a href="#contato">Contato</a></li></ul></div></nav>
+<ul><li><a href="#sobre">Sobre</a></li><li><a href="#experiencia">Experiência</a></li><li><a href="#educacao">Educação</a></li><li><a href="#projetos">Projetos</a></li><li><a href="#skills">Skills</a></li><li><a href="#contato">Contato</a></li></ul></div></nav>
 
-<header class="hero" id="top"><div class="wrap">
+<header class="hero" id="top"><div class="wrap hero-layout"><div class="hero-copy">
 <p class="eyebrow">Dados · Automação · IA</p>
 <h1>Guilherme<br><span>Nascimento.</span></h1>
 <p class="lead">Analytics Engineer em formação prática: pipelines de dados, modelagem dimensional e automações com IA, de São Paulo para onde os dados precisarem chegar.</p>
 <div class="btns"><a class="btn main" href="#projetos">Ver projetos</a><a class="btn" href="#contato">Falar comigo</a></div>
-</div></header>
+</div><figure class="hero-portrait"><img src="assets/guilherme-perfil.png" alt="Retrato de Guilherme Nascimento" width="940" height="1672" fetchpriority="high" decoding="async"></figure></div></header>
 
 <section id="sobre"><div class="wrap">
 <h2 class="reveal"><small>Sobre</small>Quem sou eu</h2>
 <div class="about reveal">
 <div>
-<p>Sou formado em Sistemas de Informação e trabalho com dados no mercado financeiro. No Bradesco BBI cuidei dos dados de clientes de Global Markets: carga, tratamento e integração com Salesforce, usando Databricks e Azure.</p>
-<p>Gosto de transformar processos manuais em fluxos automáticos e confiáveis, e de experimentar IA generativa com projetos próprios usando LangChain e LangGraph.</p>
+<p>Sou formado em Sistemas de Informação e direciono minha carreira para dados, automação e inteligência artificial. Minha trajetória começou na Prevent Senior, como jovem aprendiz e depois auxiliar farmacêutico, passou pela atuação como analista de dados freelancer e chegou ao mercado financeiro, no Bradesco BBI.</p>
+<p>No BBI, trabalhei com dados ligados à mesa de operações de Global Markets, incluindo clientes, receita, corretagem, fluxo de mercado, ativos e Research. Atuei na carga, no tratamento e na integração dessas informações com Salesforce, usando Databricks e Azure. Essa experiência aproximou meu trabalho com dados das necessidades do negócio e da rotina do mercado financeiro.</p>
+<p>Hoje, meu foco é aprofundar minha atuação em Analytics Engineering e IA aplicada: construir pipelines confiáveis, organizar dados para análise e automatizar processos. Nos meus projetos, uso Python, SQL e IA generativa para transformar informações em soluções práticas, como a coleta e a análise de notícias financeiras e agentes desenvolvidos com LangChain e LangGraph.</p>
 </div>
 <ul class="facts">
-<li><b>Formação</b>Sistemas de Informação · UNINOVE</li>
+<li><b>Formação</b>Sistemas de Informação</li>
 <li><b>Local</b>São Paulo, SP</li>
 <li><b>Idiomas</b>Português · Inglês fluente · Espanhol intermediário</li>
 </ul>
@@ -134,6 +142,15 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 <p>Dados de Global Markets: clientes, receita, corretagem, fluxo de mercado, ativos e Research. Databricks como base central, carga e tratamento dos dados, integração com Salesforce, Azure e automações.</p></div>
 <div class="job"><time>SET 2024 — ABR 2025</time><h3>Analista de Dados</h3><em>Freelancer</em></div>
 <div class="job"><time>ANTES DE 2024</time><h3>Jovem Aprendiz → Auxiliar Farmacêutico</h3><em>Prevent Senior</em></div>
+</div></div></section>
+
+<section id="educacao"><div class="wrap">
+<h2 class="reveal"><small>Educação</small>Educação e formação</h2>
+<div class="timeline reveal">
+<div class="job"><time>JAN 2021 — JUN 2025</time><h3>Bacharelado em Sistemas de Informação</h3><em>São Paulo, Brasil</em>
+<p>Formação que sustenta minha trajetória em tecnologia e meu foco em dados, automação e inteligência artificial.</p></div>
+<div class="job"><time>JAN 2020 — JUN 2020</time><h3>Intercâmbio nos Estados Unidos</h3><em>Paragould High School · Paragould, Estados Unidos</em>
+<p>Experiência de formação internacional, com vivência em outro ambiente educacional e cultural e uso do inglês no dia a dia.</p></div>
 </div></div></section>
 
 <section id="projetos"><div class="wrap">

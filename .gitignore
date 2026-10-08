@@ -1,0 +1,6 @@
+**/ia.local.json
+**/state.local.key
+**/*.sqlite3
+**/*.sqlite3-*
+**/__pycache__/
+_site/
