@@ -44,6 +44,7 @@
     const cons=$('cons');cons.replaceChildren();cons.append(el('b','Análise do ativo por IA'));
     if(ai){cons.append(el('p',`${ai.stale?'Análise anterior — dados foram atualizados.':'Análise disponível.'} Gerada em ${date(ai.generated_at)}`,'m'),el('p',ai.result.summary));const grid=el('div',undefined,'analysis-grid');list('Pontos positivos',ai.result.positives,grid);list('Riscos e atenção',ai.result.risks,grid);list('Limitações',ai.result.limitations,grid);cons.append(grid);}
     else cons.append(el('p','Análise pendente. Os indicadores e as notícias acima são reais; a síntese será exibida quando a etapa de IA estiver configurada e executada.'));
+    if(a.analysis_error)cons.append(el('p',ai?'Erro na API de IA. Esta foi a última análise realizada pela IA.':'Erro na API de IA. Ainda não há uma análise anterior disponível.','ai-error'));
   }
   $('y').textContent=new Date().getFullYear();
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
