@@ -107,6 +107,8 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 .hero-portrait img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 70%}
 @media(max-width:720px){.hero-layout{grid-template-columns:1fr;gap:34px}.hero-portrait{justify-self:center;max-width:300px}.hero{padding-bottom:60px}}
 .cons .ai-error{font-size:11px;line-height:1.5;color:var(--mut);margin-top:16px}
+
+.loja-project{margin-top:28px}.loja-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:24px 0}.loja-flow span{padding:15px 12px;border:1px solid #244238;border-radius:12px;background:#0b1914;font-size:13px;color:var(--acc)}.loja-preview{display:grid;grid-template-columns:1fr 1fr;gap:30px;background:#070e0b;border:1px solid #22352c;border-radius:18px;padding:28px;margin:24px 0}.loja-preview h4{font-size:24px;margin:14px 0}.loja-features{display:grid;gap:18px}.loja-features strong,.loja-features small{display:block}.loja-features small{color:var(--muted);margin-top:5px}.loja-project .btns{margin-top:24px}@media(max-width:720px){.loja-flow{grid-template-columns:1fr 1fr}.loja-preview{grid-template-columns:1fr;padding:20px}}
 </style>
 </head>
 <body>
@@ -170,6 +172,16 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 <div class="cons" id="cons"></div>
 <p class="disc">As análises são geradas automaticamente e não constituem recomendação de investimento.</p>
 </div>
+<article class="feat reveal loja-project" id="loja-inteligente">
+<span class="n">DADOS · IA · AUTOMAÇÃO</span>
+<h3>Loja Inteligente</h3>
+<p>Desenvolvi um assistente para transformar planilhas de vendas e despesas em uma visão clara do negócio. Você envia o arquivo, escolhe a aba e associa as colunas. O sistema confere os dados, calcula indicadores, apresenta gráficos e gera um relatório para baixar. Com sua autorização, a IA explica os resultados e destaca pontos de atenção.</p>
+<div class="tags"><span>Python</span><span>Excel e CSV</span><span>Qualidade de dados</span><span>Gemini</span><span>Automação de relatórios</span></div>
+<div class="loja-flow" aria-label="Etapas do sistema"><span>01 · Envie a planilha</span><span>02 · Confira as colunas</span><span>03 · Explore os resultados</span><span>04 · Baixe o relatório</span></div>
+<div class="loja-preview"><div><span class="n">EXEMPLO COM DADOS FICTÍCIOS</span><h4>Da planilha à decisão</h4><p>Vendas e despesas em análises separadas, com evolução mensal, rankings e avisos por linha. Os cálculos são feitos pelo código; a IA explica os indicadores.</p></div><div class="loja-features"><div><strong>Arquivo flexível</strong><small>Escolha a aba e associe os nomes das colunas.</small></div><div><strong>Erros explicados</strong><small>Saiba qual linha e campo precisam de correção.</small></div><div><strong>Relatório completo</strong><small>Dados originais, tratados, indicadores e problemas.</small></div></div></div>
+<div class="btns"><a class="btn main" href="https://github.com/guilhermenascioli/loja-inteligente" target="_blank" rel="noopener">Ver projeto e código ↗</a><a class="btn" href="https://raw.githubusercontent.com/guilhermenascioli/loja-inteligente/main/dados/exemplos/exemplo_vendas.xlsx">Baixar planilha de exemplo ↓</a></div>
+<p class="disc">Aplicação disponível para execução local. A demonstração online está em preparação. Nenhuma planilha enviada é armazenada permanentemente pelo sistema.</p>
+</article>
 <div class="cards reveal">
 <article class="card"><span class="n">01</span><h3>Pipeline de clientes Global Markets</h3><p>Carga, atualização e tratamento dos dados de clientes em uma base central, integrados ao CRM.</p><div class="tags"><span>Databricks</span><span>Salesforce</span><span>Azure</span></div></article>
 <article class="card"><span class="n">02</span><h3>Radar de Produtos</h3><p>Sistema que descobre automaticamente produtos com potencial de revenda no Mercado Livre e na Shopee.</p><div class="tags"><span>Python</span><span>Automação</span></div></article>
