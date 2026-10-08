@@ -1,0 +1,79 @@
+name: Atualizar carteira e publicar
+on:
+  schedule:
+    - cron: '15 22 * * 1-5'
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  actions: read
+  pages: write
+  id-token: write
+concurrency:
+  group: carteira-pages
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MODEL: gemini-3.5-flash-lite
+      STATE_KEY: ${{ secrets.STATE_KEY }}
+      GH_TOKEN: ${{ github.token }}
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -o projeto-automacao.zip
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r Projeto_Financial_IA/requirements-cloud.txt
+      - name: Verificar Secrets
+        run: |
+          test -n "$GEMINI_API_KEY" || { echo 'Configure GEMINI_API_KEY'; exit 1; }
+          test -n "$STATE_KEY" || { echo 'Configure STATE_KEY'; exit 1; }
+      - name: Restaurar banco
+        working-directory: Projeto_Financial_IA
+        run: python -m pipeline.cloud_state restore
+      - name: Atualizar dados
+        working-directory: Projeto_Financial_IA
+        run: |
+          set +e
+          python -m pipeline.run_all --timeout 20 --retries 1
+          result=$?
+          set -e
+          if [ "$result" = 2 ]; then
+            echo '::warning::Atualização parcial; dados anteriores preservados.'
+          elif [ "$result" != 0 ]; then
+            exit "$result"
+          fi
+      - name: Salvar banco criptografado
+        working-directory: Projeto_Financial_IA
+        run: python -m pipeline.cloud_state save
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-state
+          path: Projeto_Financial_IA/cloud/state.enc
+          retention-days: 90
+          if-no-files-found: error
+      - name: Separar arquivos públicos
+        run: |
+          mkdir -p _site/assets
+          cp index.html _site/
+          cp assets/dashboard.js assets/carteira.json assets/carteira-data.js assets/guilherme-perfil.png _site/assets/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
